@@ -15,6 +15,8 @@
   "plugins": ["@typescript-eslint", "import", "prettier"],
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/prefer-nullish-coalescing": "off"
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-argument": "off"
   }
 }
