@@ -36,3 +36,12 @@ export const receivedMessage = (req: Request, res: Response) => {
     res.send('EVENT_RECEIVED')
   }
 }
+
+export const showLog = (req: Request, res: Response) => {
+  try {
+    const data = fs.readFileSync('./logs.txt', 'utf8')
+    res.send(data)
+  } catch (error) {
+    res.send('Error')
+  }
+}
