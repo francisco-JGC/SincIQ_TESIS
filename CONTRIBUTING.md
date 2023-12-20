@@ -36,13 +36,13 @@ Para mantener un historial de cambios claro y comprensible, utiliza una convenci
 
 Ejemplos:
 
-feat(users): add user registration function
-fix(login): fix authentication error
-docs(readme): update contribution section
-style(css): adjust code formatting
-refactor(api): improve error handling
-test(api): add tests for user API
-chore(deps): update dependencies
+- feat(users): add user registration function
+- fix(login): fix authentication error
+- docs(readme): update contribution section
+- style(css): adjust code formatting
+- refactor(api): improve error handling
+- test(api): add tests for user API
+- chore(deps): update dependencies
 
 Al seguir estas convenciones, se facilita la generación automática de registros de cambios y versiones del proyecto.
 
