@@ -1,4 +1,8 @@
+import fs from 'fs'
 import type { Request, Response } from 'express'
+import type { IWhatsappReply } from '../interfaces/whatsapp.interface'
+
+const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
 
 export const verifyToken = (req: Request, res: Response) => {
   try {
@@ -16,6 +20,18 @@ export const verifyToken = (req: Request, res: Response) => {
   }
 }
 export const receivedMessage = (req: Request, res: Response) => {
-  console.log(req.body)
-  res.send('Hello World!')
+  try {
+    const { body }: { body: IWhatsappReply } = req
+    const { entry } = body
+    const { changes } = entry[0]
+    const { value } = changes[0]
+    const { messages } = value
+    const messageObject = messages[0]
+
+    myConsole.log(messageObject)
+
+    res.send('EVENT_RECEIVED')
+  } catch (error) {
+    res.send('EVENT_RECEIVED')
+  }
 }
