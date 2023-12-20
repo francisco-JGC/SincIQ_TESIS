@@ -38,10 +38,6 @@ export const receivedMessage = (req: Request, res: Response) => {
 }
 
 export const showLog = (_req: Request, res: Response) => {
-  try {
-    const data = fs.readFileSync('./logs.txt', 'utf8')
-    res.send(data)
-  } catch (error) {
-    res.send('Error')
-  }
+  const file = fs.readFileSync('./logs.txt', 'utf8')
+  res.status(200).json(file)
 }
