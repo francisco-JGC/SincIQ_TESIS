@@ -28,6 +28,7 @@ export const receivedMessage = (req: Request, res: Response) => {
     const { messages } = value
     const messageObject = messages[0]
 
+    console.log({ messageObject })
     myConsole.log(messageObject)
 
     res.send('EVENT_RECEIVED')
