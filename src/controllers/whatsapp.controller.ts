@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import fs from 'fs'
 import type { Request, Response } from 'express'
-import { typeMessages } from '../utils/typeMessages'
-import type { IMessageHandler } from '../utils/typeMessages'
+import { typeReceivedMessages } from '../utils/typeReceivedMessages'
+import type { IMessageHandler } from '../utils/typeReceivedMessages'
 
 const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
 
@@ -29,7 +29,7 @@ export const receivedMessage = (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    typeMessages[type as keyof IMessageHandler]({
+    typeReceivedMessages[type as keyof IMessageHandler]({
       messageObject,
       profileObject
     })
