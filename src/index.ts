@@ -1,6 +1,8 @@
 import express from 'express'
+import dotenv from 'dotenv'
 import * as fs from 'fs'
 import * as path from 'path'
+dotenv.config()
 
 const app = express()
 app.use(express.json())
