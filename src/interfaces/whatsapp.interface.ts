@@ -17,20 +17,23 @@ interface Value {
   messaging_product: string
   metadata: Metadata
   contacts: Contact[]
-  messages: Message[]
+  messages: IMessage[]
+  profile: any
 }
 
-interface Message {
+export interface IMessage {
   from: string
   id: string
   timestamp: string
   type: string
-  interactive: Interactive
+  interactive: IInteractive
+  text: { body: string }
 }
 
-interface Interactive {
+export interface IInteractive {
   type: string
   list_reply: Listreply
+  button_reply: Buttonreply
 }
 
 interface Listreply {
@@ -38,12 +41,17 @@ interface Listreply {
   title: string
 }
 
+interface Buttonreply {
+  id: string
+  title: string
+}
+
 interface Contact {
-  profile: Profile
+  profile: IProfile
   wa_id: string
 }
 
-interface Profile {
+export interface IProfile {
   name: string
 }
 
