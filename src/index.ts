@@ -6,6 +6,7 @@ dotenv.config()
 
 const app = express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 const port = process.env.PORT || 3000
 
