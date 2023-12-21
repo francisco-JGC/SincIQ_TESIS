@@ -1,4 +1,4 @@
-import { Router, type Request, type Response } from 'express'
+import { Router } from 'express'
 import {
   verifyToken,
   receivedMessage,
@@ -7,14 +7,9 @@ import {
 
 const router = Router()
 
-router.get('/', (_req: Request, res: Response) => {
-  console.log('Hello World! from whatsapp')
-  res.send('Hello World!')
-})
+router.get('/', verifyToken)
 
-router.get('/verify_token', verifyToken)
-
-router.post('/received_message', receivedMessage)
+router.post('/', receivedMessage)
 
 router.get('/show_log', showLog)
 
