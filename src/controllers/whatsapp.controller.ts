@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import fs from 'fs'
 import type { Request, Response } from 'express'
-import type { IWhatsappReply } from '../interfaces/whatsapp.interface'
+import { typeMessages } from '../utils/typeMessages'
+import type { IMessageHandler } from '../utils/typeMessages'
 
 const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
 
 export const verifyToken = (req: Request, res: Response) => {
-  console.log('verifyToken', req.query)
   try {
     const token = process.env.ACCESS_TOKEN_SECRET
     const queryToken = req.query['hub.verify_token']
@@ -22,15 +23,16 @@ export const verifyToken = (req: Request, res: Response) => {
 }
 export const receivedMessage = (req: Request, res: Response) => {
   try {
-    const { body }: { body: IWhatsappReply } = req
-    const { entry } = body
-    const { changes } = entry[0]
-    const { value } = changes[0]
-    const { messages } = value
-    const messageObject = messages[0]
+    const { messages, contacts } = req.body.entry[0].changes[0].value
+    const profileObject = contacts[0].profile
 
-    console.log({ messageObject })
-    myConsole.log(messageObject)
+    const messageObject = messages[0]
+    const { type } = messageObject
+
+    typeMessages[type as keyof IMessageHandler]({
+      messageObject,
+      profileObject
+    })
 
     res.send('EVENT_RECEIVED')
   } catch (error) {
