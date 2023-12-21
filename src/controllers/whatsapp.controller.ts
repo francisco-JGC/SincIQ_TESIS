@@ -20,6 +20,8 @@ export const verifyToken = (req: Request, res: Response) => {
   }
 }
 export const receivedMessage = (req: Request, res: Response) => {
+  console.log('receivedMessage', req.body)
+
   try {
     const { body }: { body: IWhatsappReply } = req
     const { entry } = body

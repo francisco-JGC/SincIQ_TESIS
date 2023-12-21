@@ -8,6 +8,7 @@ import {
 const router = Router()
 
 router.get('/', (_req: Request, res: Response) => {
+  console.log('Hello World! from whatsapp')
   res.send('Hello World!')
 })
 
