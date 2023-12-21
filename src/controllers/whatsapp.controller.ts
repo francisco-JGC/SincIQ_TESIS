@@ -35,6 +35,7 @@ export const receivedMessage = (req: Request, res: Response) => {
 
     res.send('EVENT_RECEIVED')
   } catch (error) {
+    myConsole.log(error)
     res.send('EVENT_RECEIVED')
   }
 }
