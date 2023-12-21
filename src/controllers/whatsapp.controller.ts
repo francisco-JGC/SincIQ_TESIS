@@ -5,6 +5,7 @@ import type { IWhatsappReply } from '../interfaces/whatsapp.interface'
 const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
 
 export const verifyToken = (req: Request, res: Response) => {
+  console.log('verifyToken', req.query)
   try {
     const token = process.env.ACCESS_TOKEN_SECRET
     const queryToken = req.query['hub.verify_token']
@@ -20,8 +21,6 @@ export const verifyToken = (req: Request, res: Response) => {
   }
 }
 export const receivedMessage = (req: Request, res: Response) => {
-  console.log('receivedMessage', req.body)
-
   try {
     const { body }: { body: IWhatsappReply } = req
     const { entry } = body
