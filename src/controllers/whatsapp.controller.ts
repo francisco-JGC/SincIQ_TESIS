@@ -4,6 +4,8 @@ import type { Request, Response } from 'express'
 import { typeReceivedMessages } from '../utils/typeReceivedMessages'
 import type { IMessageHandler } from '../utils/typeReceivedMessages'
 
+import { sendTextMessage } from '../services/whatsapp.service'
+
 const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
 
 export const verifyToken = (req: Request, res: Response) => {
@@ -44,4 +46,11 @@ export const receivedMessage = (req: Request, res: Response) => {
 export const showLog = (_req: Request, res: Response) => {
   const file = fs.readFileSync('./logs.txt', 'utf8')
   res.status(200).json(file)
+}
+
+export const sendMessage = async (req: Request, res: Response) => {
+  const { phone, message } = req.body
+  const response = await sendTextMessage({ textResponse: message, phone })
+
+  res.json(response)
 }
