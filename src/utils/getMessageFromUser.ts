@@ -2,7 +2,7 @@ import type {
   IInteractive,
   IMessage,
   IProfile
-} from '../interfaces/whatsapp.interface'
+} from '../interfaces/whatsapp/whatsapp.interface'
 
 export const getMessageFromUser = ({
   messageObject,
