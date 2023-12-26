@@ -5,8 +5,6 @@ import type { IMessageHandler } from '../utils/processMessages'
 
 import { sendTextMessage } from '../services/whatsapp.service'
 
-const myConsole = new console.Console(fs.createWriteStream('./logs.txt'))
-
 export const verifyToken = (req: Request, res: Response) => {
   try {
     const token = process.env.ACCESS_TOKEN_SECRET
@@ -37,7 +35,6 @@ export const receivedMessage = async (req: Request, res: Response) => {
 
     res.send('EVENT_RECEIVED')
   } catch (error) {
-    myConsole.log(error)
     res.send('EVENT_RECEIVED')
   }
 }
