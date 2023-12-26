@@ -2,7 +2,7 @@ import { Router } from 'express'
 import {
   verifyToken,
   receivedMessage,
-  sendMessage
+  sendText
 } from '../controllers/whatsapp.controller'
 
 const router = Router()
@@ -11,6 +11,6 @@ router.get('/', verifyToken)
 
 router.post('/', receivedMessage)
 
-router.post('/send_message', sendMessage)
+router.post('/send_message', sendText)
 
 export default router

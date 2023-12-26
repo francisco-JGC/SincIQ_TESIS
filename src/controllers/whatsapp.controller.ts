@@ -43,12 +43,7 @@ export const receivedMessage = (req: Request, res: Response) => {
   }
 }
 
-export const showLog = (_req: Request, res: Response) => {
-  const file = fs.readFileSync('./logs.txt', 'utf8')
-  res.status(200).json(file)
-}
-
-export const sendMessage = async (req: Request, res: Response) => {
+export const sendText = async (req: Request, res: Response) => {
   const { phone, message } = req.body
   const response = await sendTextMessage({ textResponse: message, phone })
 
