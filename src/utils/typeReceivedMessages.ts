@@ -1,4 +1,7 @@
-import type { IMessage, IProfile } from '../interfaces/whatsapp.interface'
+import type {
+  IMessage,
+  IProfile
+} from '../interfaces/whatsapp/whatsapp.interface'
 import {
   getInteractiveMessageButton,
   getMessageFromUser
