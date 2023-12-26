@@ -3,6 +3,7 @@ import type {
   IMessage,
   IProfile
 } from '../interfaces/whatsapp/whatsapp.interface'
+// import { generateMessageFromGPT } from '../services/openai.service'
 
 export const getMessageFromUser = ({
   messageObject,
@@ -28,6 +29,9 @@ export const getMessageFromUser = ({
 
     text = titleMap[interactiveObject.type] || titleMap.default
   }
+
+  // const generated = await generateMessageFromGPT(text)
+  // console.log({ generated })
 
   console.log(`Message from ${name}: ${text}`)
 }
