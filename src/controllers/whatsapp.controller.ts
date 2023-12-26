@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import fs from 'fs'
 import type { Request, Response } from 'express'
 import { ProcessMessages } from '../utils/processMessages'
@@ -23,7 +22,7 @@ export const verifyToken = (req: Request, res: Response) => {
     res.status(500).send('Error')
   }
 }
-export const receivedMessage = (req: Request, res: Response) => {
+export const receivedMessage = async (req: Request, res: Response) => {
   try {
     const { messages, contacts } = req.body.entry[0].changes[0].value
     const profileObject = contacts[0].profile
@@ -31,7 +30,7 @@ export const receivedMessage = (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    ProcessMessages[type as keyof IMessageHandler]({
+    await ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
       profileObject
     })
