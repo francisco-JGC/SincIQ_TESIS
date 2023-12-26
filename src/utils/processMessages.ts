@@ -15,7 +15,7 @@ export interface IMessageHandler {
   }) => void
 }
 
-export const typeReceivedMessages: IMessageHandler = {
+export const ProcessMessages: IMessageHandler = {
   text: getMessageFromUser,
   interactive: getInteractiveMessageButton
 }

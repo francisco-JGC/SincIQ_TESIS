@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import fs from 'fs'
 import type { Request, Response } from 'express'
-import { typeReceivedMessages } from '../utils/typeReceivedMessages'
-import type { IMessageHandler } from '../utils/typeReceivedMessages'
+import { ProcessMessages } from '../utils/processMessages'
+import type { IMessageHandler } from '../utils/processMessages'
 
 import { sendTextMessage } from '../services/whatsapp.service'
 
@@ -31,7 +31,7 @@ export const receivedMessage = (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    typeReceivedMessages[type as keyof IMessageHandler]({
+    ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
       profileObject
     })
