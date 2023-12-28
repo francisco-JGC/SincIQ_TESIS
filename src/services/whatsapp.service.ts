@@ -1,3 +1,4 @@
+import { createMessage } from '../controllers/message.controller'
 import type { IInteractiveButton } from '../interfaces/whatsapp/interactiveButtons.interface'
 import {
   handleBadRequestResponse,
@@ -13,6 +14,8 @@ export const sendTextMessage = async ({
   textResponse: string
   phone: string
 }) => {
+  await createMessage(textResponse, phone, 'client')
+
   const data = JSON.stringify({
     messaging_product: 'whatsapp',
     to: phone,
