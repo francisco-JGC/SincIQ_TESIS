@@ -8,6 +8,8 @@ import {
 } from 'typeorm'
 import { Order } from '../order/order.entity'
 
+import { Conversation } from '../conversation/conversation.entity'
+
 @Entity('client')
 @Unique(['phone_number'])
 export class Client {
@@ -25,6 +27,9 @@ export class Client {
 
   @OneToMany(() => Order, (order) => order.client)
   orders?: Order[]
+
+  @OneToMany(() => Conversation, (conversation) => conversation.client)
+  conversations: Conversation[]
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date
