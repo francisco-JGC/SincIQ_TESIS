@@ -4,6 +4,11 @@ import type { IMessageHandler } from '../utils/processMessages'
 
 import { sendTextMessage } from '../services/whatsapp.service'
 import { createClient } from './clients.cotroller'
+import { createMessage } from './message.controller'
+import {
+  createConversationWithSystem,
+  getConversationWithSystem
+} from './conversation.controller'
 
 export const verifyToken = (req: Request, res: Response) => {
   try {
@@ -28,7 +33,15 @@ export const receivedMessage = async (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    const client = await createClient(profileObject.username, messages.from)
+    const client = await createClient(profileObject.name, messages[0].from)
+
+    const conversation = await getConversationWithSystem(messages[0].from)
+
+    await createMessage(messageObject.text.body, messages[0].from, 'system')
+
+    if (!conversation.success) {
+      await createConversationWithSystem(client.data as any)
+    }
 
     ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
