@@ -1,4 +1,5 @@
 // import OpenAI from 'openai'
+import { Message } from '../entities/message/message.entity'
 import { sellerPrompt } from '../prompt/seller.prompt'
 import type { ISellerPrompt } from '../prompt/seller.prompt'
 
@@ -11,8 +12,6 @@ export const generateMessageFromGPT = async ({
   thread: any
   prompt: ISellerPrompt
 }) => {
-  console.log({ thread }, { prompt })
-
   try {
     const gptResponse = await fetch(
       'https://api.openai.com/v1/chat/completions',
@@ -29,18 +28,16 @@ export const generateMessageFromGPT = async ({
               role: 'system',
               content: sellerPrompt(prompt)
             },
-            {
-              role: 'user',
-              content: thread
-            }
+            ...thread.map((message: Message) => ({
+              role: message.receiver === 'system' ? 'system' : 'user',
+              content: message.content
+            }))
           ]
         })
       }
     )
 
     const { choices } = await gptResponse.json()
-
-    console.log({ choices })
 
     return choices[0].message
   } catch (error: any) {
