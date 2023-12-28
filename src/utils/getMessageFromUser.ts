@@ -1,39 +1,54 @@
 import type {
-  IInteractive,
+  // IInteractive,
   IMessage,
   IProfile
 } from '../interfaces/whatsapp/whatsapp.interface'
-// import { generateMessageFromGPT } from '../services/openai.service'
+import { generateMessageFromGPT } from '../services/openai.service'
+import { sendTextMessage } from '../services/whatsapp.service'
 
-export const getMessageFromUser = ({
+export const getMessageFromUser = async ({
   messageObject,
-  profileObject
+  profileObject,
+  clientExists,
+  phone_number
 }: {
   messageObject: IMessage
   profileObject: IProfile
+  clientExists?: boolean
+  phone_number: string
 }) => {
   let text = ''
 
-  const { type } = messageObject
   const { name } = profileObject
 
-  if (type === 'text') {
-    text = messageObject.text.body
-  } else if (type === 'interactive') {
-    const interactiveObject: IInteractive = messageObject.interactive
-    const titleMap: Record<string, string> = {
-      button_reply: interactiveObject.button_reply.title,
-      list_reply: interactiveObject.list_reply.title,
-      default: 'No text'
+  text = messageObject.text.body
+
+  console.log({ clientExists }, { phone_number }, { text })
+
+  const generated = await generateMessageFromGPT({
+    thread: text,
+    prompt: {
+      client_name: name,
+      products: [
+        { name: 'iPhone 13 Pro Max', price: 1099 },
+        { name: 'Samsung Galaxy S21 Ultra', price: 1199 },
+        { name: 'Google Pixel 6 Pro', price: 899 },
+        { name: 'OnePlus 9 Pro', price: 969 }
+      ],
+      business_name: 'Tech Store',
+      business_address: '123 Main St, New York, NY 10030',
+      location: 'New York'
     }
+  })
 
-    text = titleMap[interactiveObject.type] || titleMap.default
+  console.log({ generated })
+
+  if (generated) {
+    await sendTextMessage({
+      textResponse: generated.content,
+      phone: phone_number
+    })
   }
-
-  // const generated = await generateMessageFromGPT(text)
-  // console.log({ generated })
-
-  console.log(`Message from ${name}: ${text}`)
 }
 
 export const getInteractiveMessageButton = ({
