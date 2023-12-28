@@ -8,7 +8,12 @@ import {
 } from './getMessageFromUser'
 
 export interface IMessageHandler {
-  text: (params: { messageObject: IMessage; profileObject: IProfile }) => void
+  text: (params: {
+    messageObject: IMessage
+    profileObject: IProfile
+    clientExists?: boolean
+    phone_number: string
+  }) => void
   interactive: (params: {
     messageObject: IMessage
     profileObject: IProfile
