@@ -1,26 +1,48 @@
-import OpenAI from 'openai'
-const openai = new OpenAI()
+// import OpenAI from 'openai'
+import { sellerPrompt } from '../prompt/seller.prompt'
+import type { ISellerPrompt } from '../prompt/seller.prompt'
 
-export const generateMessageFromGPT = async (thread: string) => {
-  console.log({ thread })
+// const openai = new OpenAI()
+
+export const generateMessageFromGPT = async ({
+  thread,
+  prompt
+}: {
+  thread: any
+  prompt: ISellerPrompt
+}) => {
+  console.log({ thread }, { prompt })
 
   try {
-    const gptResponse = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'Who won the world series in 2020?' },
-        {
-          role: 'assistant',
-          content: 'The Los Angeles Dodgers won the World Series in 2020.'
+    const gptResponse = await fetch(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
         },
-        { role: 'user', content: 'Where was it played?' }
-      ]
-    })
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: sellerPrompt(prompt)
+            },
+            {
+              role: 'user',
+              content: thread
+            }
+          ]
+        })
+      }
+    )
 
-    console.log({ gptResponse })
+    const { choices } = await gptResponse.json()
 
-    return gptResponse.choices[0]
+    console.log({ choices })
+
+    return choices[0].message
   } catch (error: any) {
     console.log(error.message)
   }
