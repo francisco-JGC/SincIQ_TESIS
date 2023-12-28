@@ -1,8 +1,9 @@
+import 'dotenv/config'
+
 import express from 'express'
-import dotenv from 'dotenv'
 import * as fs from 'fs'
 import * as path from 'path'
-dotenv.config()
+import { AppDataSource } from './config/database.config'
 
 const app = express()
 app.use(express.json())
@@ -16,6 +17,15 @@ fs.readdirSync(path.join(__dirname, 'routes')).map(async (file) => {
   app.use('/' + routeName, route)
 })
 
-app.listen(port, () => {
-  console.log(`app listening at http://localhost:${port}`)
-})
+async function main() {
+  try {
+    await AppDataSource.initialize()
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`)
+    })
+  } catch (error: any) {
+    console.log(error.message)
+  }
+}
+
+main()
