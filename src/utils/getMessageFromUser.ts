@@ -1,3 +1,5 @@
+import { getConversationWithSystem } from '../controllers/conversation.controller'
+import { Conversation } from '../entities/conversation/conversation.entity'
 import type {
   // IInteractive,
   IMessage,
@@ -7,9 +9,7 @@ import { generateMessageFromGPT } from '../services/openai.service'
 import { sendTextMessage } from '../services/whatsapp.service'
 
 export const getMessageFromUser = async ({
-  messageObject,
   profileObject,
-  clientExists,
   phone_number
 }: {
   messageObject: IMessage
@@ -17,18 +17,13 @@ export const getMessageFromUser = async ({
   clientExists?: boolean
   phone_number: string
 }) => {
-  let text = ''
-
-  const { name } = profileObject
-
-  text = messageObject.text.body
-
-  console.log({ clientExists }, { phone_number }, { text })
+  const conversationRes = await getConversationWithSystem(phone_number)
+  const conversation = conversationRes.data as Conversation
 
   const generated = await generateMessageFromGPT({
-    thread: text,
+    thread: conversation.messages,
     prompt: {
-      client_name: name,
+      client_name: profileObject.name,
       products: [
         { name: 'iPhone 13 Pro Max', price: 1099 },
         { name: 'Samsung Galaxy S21 Ultra', price: 1199 },
@@ -40,8 +35,6 @@ export const getMessageFromUser = async ({
       location: 'New York'
     }
   })
-
-  console.log({ generated })
 
   if (generated) {
     await sendTextMessage({
