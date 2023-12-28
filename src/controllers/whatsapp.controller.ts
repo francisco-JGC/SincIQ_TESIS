@@ -1,9 +1,9 @@
-import fs from 'fs'
 import type { Request, Response } from 'express'
 import { ProcessMessages } from '../utils/processMessages'
 import type { IMessageHandler } from '../utils/processMessages'
 
 import { sendTextMessage } from '../services/whatsapp.service'
+import { createClient } from './clients.cotroller'
 
 export const verifyToken = (req: Request, res: Response) => {
   try {
@@ -28,9 +28,13 @@ export const receivedMessage = async (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    await ProcessMessages[type as keyof IMessageHandler]({
+    const client = await createClient(profileObject.username, messages.from)
+
+    ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
-      profileObject
+      profileObject,
+      phone_number: messages[0].from,
+      clientExists: client.success
     })
 
     res.send('EVENT_RECEIVED')
