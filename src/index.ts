@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000
 fs.readdirSync(path.join(__dirname, 'routes')).map(async (file) => {
   const { default: route } = await import(`./routes/${file}`)
   const [routeName] = file.split('.')
-  app.use('/' + routeName, route)
+  app.use(`/api/${routeName}`, route)
 })
 
 async function main() {
