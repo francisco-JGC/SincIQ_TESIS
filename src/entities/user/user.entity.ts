@@ -6,11 +6,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ unique: true })
+  @Column()
   username: string
 
-  @Column()
+  @Column({ unique: true })
+  email: string
+
+  @Column({ nullable: true })
   password: string
+
+  @Column({ default: false })
+  provider: 'local' | 'facebook'
+
+  @Column({ nullable: true })
+  provider_id: string
 
   @OneToMany(() => Conversation, (conversation) => conversation.user)
   conversations: Conversation[]
