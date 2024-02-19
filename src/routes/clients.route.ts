@@ -9,7 +9,9 @@ router.post('/', async (req, res) => {
   const { username, phone_number } = req.body as ICreateClient
 
   if (!username || !phone_number) {
-    return handleBadRequestResponse(res, new Error('No client data provided'))
+    return res.json(
+      handleBadRequestResponse(res, new Error('No client data provided'))
+    )
   }
 
   return res.json(await createClient(username, phone_number))
