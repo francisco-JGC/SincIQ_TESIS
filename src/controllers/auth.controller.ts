@@ -7,6 +7,7 @@ import {
 } from '../utils/handleHttpsResponse'
 import { Request, Response } from 'express'
 import { AppDataSource } from '../config/database.config'
+import { createUser } from './user.controller'
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body as Pick<User, 'email' | 'password'>
@@ -47,11 +48,31 @@ export const login = async (req: Request, res: Response) => {
         user: {
           id: user.id,
           name: user.username,
-          imageURL: user.imageURL
+          imageURL: user.image_url
         }
       })
     )
   } catch (error: any) {
     return res.json(handleBadRequestResponse({}, error.message))
   }
+}
+
+export const register = async (req: Request, res: Response) => {
+  const { email, password, username } = req.body as Pick<
+    User,
+    'email' | 'password' | 'username'
+  >
+
+  if (!email || !password || !username) {
+    return res.json(
+      handleBadRequestResponse(
+        res,
+        new Error('Invalid email, username or password')
+      )
+    )
+  }
+
+  const user = await createUser(username, email, password)
+
+  return res.json(user)
 }
