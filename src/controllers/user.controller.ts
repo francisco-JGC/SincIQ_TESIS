@@ -1,7 +1,10 @@
 import { hash } from 'bcrypt'
 import { User } from '../entities/user/user.entity'
 import { AppDataSource } from '../config/database.config'
-import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
+import {
+  handleBadRequestResponse,
+  handleOkResponse
+} from '../utils/handleHttpsResponse'
 
 export const createUser = async (
   username: string,
@@ -25,10 +28,10 @@ export const createUser = async (
 
     const newUser = await AppDataSource.getRepository(User).save(user)
 
-    return {
+    return handleOkResponse({
       id: newUser.id,
       username: newUser.username
-    }
+    })
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
   }
