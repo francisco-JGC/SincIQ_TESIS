@@ -21,6 +21,9 @@ export class User {
   @Column({ nullable: true })
   provider_id: string
 
+  @Column({ nullable: true })
+  imageURL: string
+
   @OneToMany(() => Conversation, (conversation) => conversation.user)
   conversations: Conversation[]
 }
