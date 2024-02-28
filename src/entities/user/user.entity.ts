@@ -22,7 +22,7 @@ export class User {
   provider_id: string
 
   @Column({ nullable: true })
-  imageURL: string
+  image_url: string
 
   @OneToMany(() => Conversation, (conversation) => conversation.user)
   conversations: Conversation[]
