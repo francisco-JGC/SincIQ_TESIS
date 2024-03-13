@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express'
 import { ProcessMessages } from '../utils/processMessages'
 import type { IMessageHandler } from '../utils/processMessages'
-
 import { sendTextMessage } from '../services/whatsapp.service'
 import { createClient } from './clients.cotroller'
 import { createMessage } from './message.controller'
@@ -9,6 +8,8 @@ import {
   createConversationWithSystem,
   getConversationWithSystem
 } from './conversation.controller'
+import EventEmitter from 'events'
+const eventEmitter = new EventEmitter()
 
 export const verifyToken = (req: Request, res: Response) => {
   try {
@@ -43,6 +44,18 @@ export const receivedMessage = async (req: Request, res: Response) => {
       await createConversationWithSystem(client.data as any)
     }
 
+    // emitir evento para o socket
+    eventEmitter.emit('received-message', {
+      client: client?.data,
+      message: messageObject.text.body,
+      from: messages[0].from,
+      type_message: type,
+      message_by: 'client'
+    })
+
+    // res.send('EVENT_RECEIVED')
+    // return
+
     ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
       profileObject,
@@ -62,3 +75,5 @@ export const sendText = async (req: Request, res: Response) => {
 
   res.json(response)
 }
+
+export { eventEmitter }
