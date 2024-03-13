@@ -5,6 +5,9 @@ import {
   handleOkResponse
 } from '../utils/handleHttpsResponse'
 import { useFetch } from '../utils/useFetch'
+import EventEmitter from 'events'
+const eventEmitter = new EventEmitter()
+
 const BASE_URL = `https://${process.env.WHATSAAP_HOST}${process.env.WHATSAAP_PATH}`
 
 export const sendTextMessage = async ({
@@ -35,6 +38,14 @@ export const sendTextMessage = async ({
   }
 
   try {
+    eventEmitter.emit('sending-message', {
+      client: { phone_number: phone },
+      message: textResponse,
+      from: phone,
+      type_message: 'text',
+      message_by: 'system'
+    })
+
     return handleOkResponse(await useFetch(BASE_URL, options))
   } catch (error) {
     return handleBadRequestResponse({}, error as Error)
@@ -86,8 +97,17 @@ export const sendInteractiveButton = async ({
   }
 
   try {
+    eventEmitter.emit('sending-message', {
+      client: { phone_number: phone },
+      message: textResponse,
+      from: phone,
+      type_message: 'interactive',
+      message_by: 'system'
+    })
     return handleOkResponse(await useFetch(BASE_URL, options))
   } catch (error) {
     return handleBadRequestResponse({}, error as Error)
   }
 }
+
+export { eventEmitter }
