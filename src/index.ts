@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 import express from 'express'
+import cors from 'cors'
 import * as fs from 'fs'
 import * as path from 'path'
 import { AppDataSource } from './config/database.config'
@@ -9,7 +10,9 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-const port = process.env.PORT || 3000
+app.use(cors())
+
+const port = process.env.PORT || 3001
 
 fs.readdirSync(path.join(__dirname, 'routes')).map(async (file) => {
   const { default: route } = await import(`./routes/${file}`)
