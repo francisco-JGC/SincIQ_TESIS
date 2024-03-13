@@ -6,10 +6,17 @@ import {
 import { AppDataSource } from '../config/database.config'
 
 export const createClient = async (username: string, phone_number: string) => {
-  const clientExists = await getClientByPhoneNumber(phone_number)
+  const clientExists = (await getClientByPhoneNumber(phone_number)) as any
 
   if (clientExists.success) {
-    return handleBadRequestResponse({}, new Error('Client already exists'))
+    return handleBadRequestResponse(
+      {
+        id: clientExists?.data?.id?.toString() || '',
+        username: clientExists?.data?.username,
+        phone_number: clientExists?.data?.phone_number
+      },
+      new Error('Client already exists')
+    )
   }
 
   try {
