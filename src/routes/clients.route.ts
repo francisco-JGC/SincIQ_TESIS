@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createClient } from '../controllers/clients.cotroller'
+import { createClient, getClients } from '../controllers/clients.cotroller'
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 import { ICreateClient } from '../entities/client/types/add-client.interface'
 
@@ -16,5 +16,7 @@ router.post('/', async (req, res) => {
 
   return res.json(await createClient(username, phone_number))
 })
+
+router.get('/', getClients)
 
 export default router
