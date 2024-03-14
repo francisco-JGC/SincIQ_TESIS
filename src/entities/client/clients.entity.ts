@@ -25,6 +25,9 @@ export class Client {
   @Column({ nullable: true })
   address?: string
 
+  @Column({ nullable: true })
+  image_url?: string
+
   @OneToMany(() => Order, (order) => order.client)
   orders?: Order[]
 
