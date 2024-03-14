@@ -4,6 +4,7 @@ import {
   handleOkResponse
 } from '../utils/handleHttpsResponse'
 import { AppDataSource } from '../config/database.config'
+import { Request, Response } from 'express'
 
 export const createClient = async (username: string, phone_number: string) => {
   const clientExists = (await getClientByPhoneNumber(phone_number)) as any
@@ -43,6 +44,34 @@ export const getClientByPhoneNumber = async (phone_number: string) => {
     }
 
     return handleOkResponse(client)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
+
+export const getClients = async (_req: Request, res: Response) => {
+  try {
+    const clients = await AppDataSource.getRepository(Client).find({
+      relations: ['conversations', 'conversations.messages']
+    })
+
+    const clientsWithLastMessage = clients.map((client) => {
+      return {
+        ...client,
+        lastMessage: client.conversations.map((conversation) => {
+          const lastMessage = conversation.messages.reduce((prev, current) =>
+            prev.id > current.id ? prev : current
+          )
+
+          return {
+            ...lastMessage,
+            conversation_id: conversation.id
+          }
+        })
+      }
+    })
+
+    return res.json(handleOkResponse(clientsWithLastMessage))
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
   }
