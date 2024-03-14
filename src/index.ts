@@ -54,7 +54,6 @@ io.on('connection', (socket) => {
   })
 
   emitterBot.on('sending-message', (data) => {
-    console.log('sending-message', data)
     socket.emit('server:sending-message', data)
   })
 })
