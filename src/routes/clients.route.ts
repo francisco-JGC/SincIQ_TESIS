@@ -24,14 +24,14 @@ router.post('/', async (req, res) => {
 
 router.get('/', getClients)
 
-router.post('/active-desactive-bot', async (req, res) => {
+router.post('/change-bot-status', async (req, res) => {
   const { client_id, bot_status } = req.body as IActiveDesactiveBot
 
   if (!client_id || bot_status === undefined) {
     return res.json(
       handleBadRequestResponse(
         res,
-        new Error('Por favor, envie os dados corretos')
+        new Error('Por favor, envie los datos necesarios')
       )
     )
   }
