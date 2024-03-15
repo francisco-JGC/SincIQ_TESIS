@@ -56,6 +56,11 @@ export const receivedMessage = async (req: Request, res: Response) => {
     // res.send('EVENT_RECEIVED')
     // return
 
+    if (!(client.data as { bot_status?: boolean })?.bot_status) {
+      res.send('EVENT_RECEIVED')
+      return
+    }
+
     ProcessMessages[type as keyof IMessageHandler]({
       messageObject,
       profileObject,
