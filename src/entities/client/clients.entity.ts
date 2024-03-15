@@ -28,6 +28,9 @@ export class Client {
   @Column({ nullable: true })
   image_url?: string
 
+  @Column({ default: true, nullable: true })
+  bot_status?: boolean
+
   @OneToMany(() => Order, (order) => order.client)
   orders?: Order[]
 
