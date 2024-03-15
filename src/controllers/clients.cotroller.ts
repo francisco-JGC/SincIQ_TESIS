@@ -14,7 +14,8 @@ export const createClient = async (username: string, phone_number: string) => {
       {
         id: clientExists?.data?.id?.toString() || '',
         username: clientExists?.data?.username,
-        phone_number: clientExists?.data?.phone_number
+        phone_number: clientExists?.data?.phone_number,
+        bot_status: clientExists?.data?.bot_status
       },
       new Error('Client already exists')
     )
