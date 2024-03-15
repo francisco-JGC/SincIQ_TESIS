@@ -76,3 +76,26 @@ export const getClients = async (_req: Request, res: Response) => {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const changeBotStatus = async (
+  client_id: number,
+  bot_status: boolean
+) => {
+  try {
+    const client = await AppDataSource.getRepository(Client).findOne({
+      where: { id: client_id }
+    })
+
+    if (!client) {
+      return handleBadRequestResponse({}, new Error('El cliente no existe'))
+    }
+
+    client.bot_status = bot_status
+
+    const updatedClient = await AppDataSource.getRepository(Client).save(client)
+
+    return handleOkResponse(updatedClient)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
