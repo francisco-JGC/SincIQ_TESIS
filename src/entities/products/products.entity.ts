@@ -36,8 +36,8 @@ export class Product {
   @Column({ default: 'active' })
   status: string
 
-  @Column()
-  image_url: string
+  @Column({ default: [], array: true, nullable: true })
+  images_url: string[]
 
   @ManyToMany(() => Order, (order) => order.products)
   orders: Order[]
