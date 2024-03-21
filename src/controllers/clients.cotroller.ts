@@ -52,7 +52,6 @@ export const getClientByPhoneNumber = async (phone_number: string) => {
 }
 
 export const getClients = async () => {
-  console.log('getClients')
   try {
     const clients = await AppDataSource.getRepository(Client).find({
       relations: ['conversations', 'conversations.messages']
