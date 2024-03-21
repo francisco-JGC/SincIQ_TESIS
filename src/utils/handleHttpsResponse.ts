@@ -16,11 +16,11 @@ export const handleOkResponse = <T>(data: T): IResponseHTTP<T> => {
 
 export const handleBadRequestResponse = <T>(
   data: T,
-  error: Error
+  error: Error | string
 ): IResponseHTTP<T> => {
   return {
     status: 400,
-    message: error.message,
+    message: error instanceof Error ? error.message : error,
     success: false,
     data
   }
