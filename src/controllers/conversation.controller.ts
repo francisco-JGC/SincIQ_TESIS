@@ -45,7 +45,9 @@ export const getConversationWithSystem = async (phone_number: string) => {
       Conversation
     ).findOne({
       where: { system: 'system', client: { phone_number } },
-      relations: ['messages']
+      relations: ['messages'],
+      // obtener la ultioma conversacion
+      order: { created_at: 'DESC' }
     })
 
     if (!conversation) {
@@ -54,6 +56,31 @@ export const getConversationWithSystem = async (phone_number: string) => {
         await createConversationWithSystem(dataClient.data as Client)
       )
     }
+
+    // const date = new Date()
+    // const dateConversation = new Date(conversation.created_at)
+    // const diff = date.getTime() - dateConversation.getTime()
+    // const diffHours = diff / (1000 * 60 * 60)
+
+    // if (diffHours > 12) {
+    //   const dataClient = await getClientByPhoneNumber(phone_number)
+    //   return handleOkResponse(
+    //     await createConversationWithSystem(dataClient.data as Client)
+    //   )
+    // }
+
+    // si la conversacion tiene 1 min de antiguedad se crea una nueva
+    // const date = new Date()
+    // const lastMessage = conversation.messages[0]
+    // const diff = date.getTime() - lastMessage.created_at.getTime()
+    // const minutes = Math.floor(diff / 60000)
+
+    // if (minutes > 1) {
+    //   const dataClient = await getClientByPhoneNumber(phone_number)
+    //   return handleOkResponse(
+    //     await createConversationWithSystem(dataClient.data as Client)
+    //   )
+    // }
 
     return handleOkResponse(conversation)
   } catch (error: any) {
