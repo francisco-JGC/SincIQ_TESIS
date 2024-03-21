@@ -65,14 +65,14 @@ export const getClients = async () => {
       return {
         ...client,
         lastMessage: client.conversations.map((conversation) => {
-          const lastMessage = conversation.messages.reduce((prev, current) =>
-            prev.id > current.id ? prev : current
-          )
+          const lastMessage =
+            conversation.messages.length > 0
+              ? conversation.messages.reduce((prev, current) =>
+                  prev.id > current.id ? prev : current
+                )
+              : null
 
-          return {
-            ...lastMessage,
-            conversation_id: conversation.id
-          }
+          return { ...lastMessage, conversation_id: conversation.id } || []
         })
       }
     })
