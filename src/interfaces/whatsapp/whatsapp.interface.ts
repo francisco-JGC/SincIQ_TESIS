@@ -24,7 +24,7 @@ interface Value {
 export interface IMessage {
   from: string
   id: string
-  timestamp: string
+  created_at: string
   type: string
   interactive: IInteractive
   text: { body: string }
