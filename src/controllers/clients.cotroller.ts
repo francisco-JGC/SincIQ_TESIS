@@ -4,7 +4,8 @@ import {
   handleOkResponse
 } from '../utils/handleHttpsResponse'
 import { AppDataSource } from '../config/database.config'
-import { Request, Response } from 'express'
+import { Message } from '../entities/message/message.entity'
+import { Conversation } from '../entities/conversation/conversation.entity'
 
 export const createClient = async (username: string, phone_number: string) => {
   const clientExists = (await getClientByPhoneNumber(phone_number)) as any
@@ -50,11 +51,16 @@ export const getClientByPhoneNumber = async (phone_number: string) => {
   }
 }
 
-export const getClients = async (_req: Request, res: Response) => {
+export const getClients = async () => {
+  console.log('getClients')
   try {
     const clients = await AppDataSource.getRepository(Client).find({
       relations: ['conversations', 'conversations.messages']
     })
+
+    if (!clients) {
+      return handleBadRequestResponse({}, new Error('Clients not found'))
+    }
 
     const clientsWithLastMessage = clients.map((client) => {
       return {
@@ -72,7 +78,7 @@ export const getClients = async (_req: Request, res: Response) => {
       }
     })
 
-    return res.json(handleOkResponse(clientsWithLastMessage))
+    return handleOkResponse(clientsWithLastMessage)
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
   }
@@ -96,6 +102,33 @@ export const changeBotStatus = async (
     const updatedClient = await AppDataSource.getRepository(Client).save(client)
 
     return handleOkResponse(updatedClient)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
+
+export async function clearConversationsFromClient(client_id: number) {
+  try {
+    const client = await AppDataSource.getRepository(Client).findOne({
+      where: { id: client_id },
+      relations: ['conversations', 'conversations.messages']
+    })
+
+    if (!client) {
+      return handleBadRequestResponse({}, new Error('Client not found'))
+    }
+
+    await AppDataSource.transaction(async (manager) => {
+      await manager
+        .getRepository(Message)
+        .remove(
+          client.conversations.flatMap((conversation) => conversation.messages)
+        )
+
+      await manager.getRepository(Conversation).remove(client.conversations)
+    })
+
+    return handleOkResponse({})
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
   }
