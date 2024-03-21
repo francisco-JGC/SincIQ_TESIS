@@ -15,8 +15,8 @@ export class Message {
   @Column()
   content: string
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
-  timestamp: Date
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date
 
   @Column()
   sender: string
