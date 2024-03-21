@@ -43,5 +43,5 @@ export class Product {
   orders: Order[]
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date
+  created_at: Date
 }
