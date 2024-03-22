@@ -45,9 +45,7 @@ export const getConversationWithSystem = async (phone_number: string) => {
       Conversation
     ).findOne({
       where: { system: 'system', client: { phone_number } },
-      relations: ['messages'],
-      // obtener la ultioma conversacion
-      order: { created_at: 'DESC' }
+      relations: ['messages']
     })
 
     if (!conversation) {
