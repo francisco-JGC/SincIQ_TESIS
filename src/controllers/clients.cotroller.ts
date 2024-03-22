@@ -72,7 +72,6 @@ export const getClients = async () => {
           }
         }),
         lastMessage: client.conversations.map((conversation) => {
-          console.log(conversation)
           const lastMessage =
             conversation.messages.length > 0
               ? conversation.messages.reduce((prev, current) =>
