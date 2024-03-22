@@ -64,7 +64,15 @@ export const getClients = async () => {
     const clientsWithLastMessage = clients.map((client) => {
       return {
         ...client,
+        conversations: client.conversations.map((conversation) => {
+          // ordenar mensajes por id
+          return {
+            ...conversation,
+            messages: conversation.messages.sort((a, b) => a.id - b.id)
+          }
+        }),
         lastMessage: client.conversations.map((conversation) => {
+          console.log(conversation)
           const lastMessage =
             conversation.messages.length > 0
               ? conversation.messages.reduce((prev, current) =>
