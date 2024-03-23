@@ -6,7 +6,10 @@ import {
   handleOkResponse
 } from '../utils/handleHttpsResponse'
 import { getConversationWithSystem } from './conversation.controller'
-import { getClientByPhoneNumber } from './clients.cotroller'
+import {
+  getClientByPhoneNumber,
+  setSeenConversationByIdClient
+} from './clients.cotroller'
 import { Client } from '../entities/client/clients.entity'
 
 export const createMessage = async (
@@ -38,8 +41,12 @@ export const createMessage = async (
 
     messageObject.conversation = conversation.data as Conversation
 
-    const newMessage =
-      await AppDataSource.getRepository(Message).save(messageObject)
+    const newMessage = await AppDataSource.transaction(async (manager) => {
+      const newMessage = await manager.save(messageObject)
+      await setSeenConversationByIdClient(client.id, false)
+
+      return newMessage
+    })
 
     return handleOkResponse(newMessage)
   } catch (error: any) {
