@@ -3,7 +3,8 @@ import {
   createClient,
   getClients,
   changeBotStatus,
-  clearConversationsFromClient
+  clearConversationsFromClient,
+  setSeenConversationByIdClient
 } from '../controllers/clients.cotroller'
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 import { ICreateClient } from '../entities/client/types/add-client.interface'
@@ -55,6 +56,22 @@ router.post('/clear-conversation', async (req, res) => {
   }
 
   return res.json(await clearConversationsFromClient(client_id))
+})
+
+router.post('/seen-conversation', async (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const { client_id, state } = req.body as any
+
+  if (!client_id) {
+    return res.json(
+      handleBadRequestResponse(
+        res,
+        new Error('Por favor, envie los datos necesarios')
+      )
+    )
+  }
+
+  return res.json(await setSeenConversationByIdClient(client_id, state))
 })
 
 export default router
