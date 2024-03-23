@@ -139,3 +139,32 @@ export async function clearConversationsFromClient(client_id: number) {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const setSeenConversationByIdClient = async (
+  client_id: number,
+  state: boolean
+) => {
+  try {
+    const client = await AppDataSource.getRepository(Client).findOne({
+      where: { id: client_id },
+      relations: ['conversations']
+    })
+
+    if (!client) {
+      return handleBadRequestResponse({}, new Error('Client not found'))
+    }
+
+    await AppDataSource.transaction(async (manager) => {
+      await Promise.all(
+        client.conversations.map(async (conversation) => {
+          conversation.seen = state
+          await manager.getRepository(Conversation).save(conversation)
+        })
+      )
+    })
+
+    return handleOkResponse({})
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
