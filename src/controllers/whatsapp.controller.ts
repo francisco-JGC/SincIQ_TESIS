@@ -9,6 +9,7 @@ import {
   getConversationWithSystem
 } from './conversation.controller'
 import EventEmitter from 'events'
+import { Conversation } from '../entities/conversation/conversation.entity'
 const eventEmitter = new EventEmitter()
 
 export const verifyToken = (req: Request, res: Response) => {
@@ -55,6 +56,7 @@ export const receivedMessage = async (req: Request, res: Response) => {
       from: messages[0].from,
       type_message: type,
       message_by: 'client',
+      conversations: conversation?.data as Conversation,
       created_at: (createdMessage.data as { created_at?: string })?.created_at
     })
 
