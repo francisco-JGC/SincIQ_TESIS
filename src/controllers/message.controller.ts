@@ -43,7 +43,10 @@ export const createMessage = async (
 
     const newMessage = await AppDataSource.transaction(async (manager) => {
       const newMessage = await manager.save(messageObject)
-      await setSeenConversationByIdClient(client.id, false)
+
+      if (receiver === 'system') {
+        await setSeenConversationByIdClient(client.id, false)
+      }
 
       return newMessage
     })
