@@ -26,6 +26,9 @@ export class Conversation {
   @Column()
   system: 'system' | 'user'
 
+  @Column({ default: false, type: 'boolean' })
+  seen: boolean
+
   @OneToMany(() => Message, (message) => message.conversation)
   messages: Message[]
 
