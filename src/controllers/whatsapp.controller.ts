@@ -38,7 +38,11 @@ export const receivedMessage = async (req: Request, res: Response) => {
 
     const conversation = await getConversationWithSystem(messages[0].from)
 
-    await createMessage(messageObject.text.body, messages[0].from, 'system')
+    const createdMessage = await createMessage(
+      messageObject.text.body,
+      messages[0].from,
+      'system'
+    )
 
     if (!conversation.success) {
       await createConversationWithSystem(client.data as any)
@@ -50,7 +54,8 @@ export const receivedMessage = async (req: Request, res: Response) => {
       message: messageObject.text.body,
       from: messages[0].from,
       type_message: type,
-      message_by: 'client'
+      message_by: 'client',
+      created_at: (createdMessage.data as { created_at?: string })?.created_at
     })
 
     // res.send('EVENT_RECEIVED')
