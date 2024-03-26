@@ -12,14 +12,12 @@ const BASE_URL = `https://${process.env.WHATSAAP_HOST}${process.env.WHATSAAP_PAT
 
 export const sendTextMessage = async ({
   textResponse,
-  phone,
-  type
+  phone
 }: {
   textResponse: string
   phone: string
-  type: 'text' | 'image'
 }) => {
-  await createMessage(textResponse, phone, type, '', 'client')
+  await createMessage(textResponse, phone, 'client')
 
   const data = JSON.stringify({
     messaging_product: 'whatsapp',
