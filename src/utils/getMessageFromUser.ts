@@ -40,8 +40,7 @@ export const getMessageFromUser = async ({
   if (generated) {
     await sendTextMessage({
       textResponse: generated.content,
-      phone: phone_number,
-      type: 'text'
+      phone: phone_number
     })
   }
 }
