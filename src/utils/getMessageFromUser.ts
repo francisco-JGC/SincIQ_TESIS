@@ -1,5 +1,6 @@
 import { getConversationWithSystem } from '../controllers/conversation.controller'
 import { Conversation } from '../entities/conversation/conversation.entity'
+import { IMessageImage } from '../interfaces/whatsapp/textImage.interface'
 import type {
   // IInteractive,
   IMessage,
@@ -39,7 +40,8 @@ export const getMessageFromUser = async ({
   if (generated) {
     await sendTextMessage({
       textResponse: generated.content,
-      phone: phone_number
+      phone: phone_number,
+      type: 'text'
     })
   }
 }
@@ -60,4 +62,19 @@ export const getInteractiveMessageButton = ({
   }
 
   console.log(`Message from ${name}: ${text}`)
+}
+
+export const getImageMessage = async ({
+  phone_number
+}: {
+  messageObject: IMessageImage
+  profileObject: IProfile
+  phone_number: string
+  clientExists?: boolean
+}) => {
+  const conversationRes = await getConversationWithSystem(phone_number)
+  const conversation = conversationRes.data as Conversation
+
+  console.log('Image message from', phone_number)
+  console.log('Conversation', conversation)
 }
