@@ -6,7 +6,7 @@ import { Server } from 'socket.io'
 import * as fs from 'fs'
 import * as path from 'path'
 import { AppDataSource } from './config/database.config'
-import { eventEmitter as emitterWhatsapp } from './controllers/whatsapp.controller'
+import { eventEmitter as emitterWhatsapp } from './utils/process/processMessageSocket'
 import { eventEmitter as emitterBot } from './services/whatsapp.service'
 
 const app = express()
