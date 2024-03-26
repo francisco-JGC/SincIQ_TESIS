@@ -1,9 +1,8 @@
 import EventEmitter from 'events'
-import type { IMessageImage } from '../../interfaces/whatsapp/textImage.interface'
 
 const eventEmitter = new EventEmitter()
 
-interface IBodyMessage {
+export interface IBodySocketMessage {
   client: any
   message: string
   from: string
@@ -15,8 +14,8 @@ interface IBodyMessage {
 }
 
 export interface ISocketMessageHandler {
-  text: (params: IBodyMessage) => void
-  image: (params: IBodyMessage) => void
+  text: (params: IBodySocketMessage) => void
+  default: (params: IBodySocketMessage) => void
 }
 
 export const ProcessMessageSocket: ISocketMessageHandler = {
@@ -25,18 +24,14 @@ export const ProcessMessageSocket: ISocketMessageHandler = {
 
     handleEmmiterMessage(params)
   },
-  image: (params) => {
-    const { messageObject } = params as { messageObject: IMessageImage }
-
+  default: (params) => {
     const data = {
       ...params,
-      message: messageObject.image.caption,
-      image: messageObject.image
+      message:
+        'El usuario envió un archivo, pero no son soportadas en el sistema 😣'
     }
 
     delete data.messageObject
-
-    console.log({ data })
 
     handleEmmiterMessage(data)
   }
