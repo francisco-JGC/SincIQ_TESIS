@@ -10,10 +10,6 @@ import {
 } from './conversation.controller'
 import EventEmitter from 'events'
 import { Conversation } from '../entities/conversation/conversation.entity'
-import {
-  ISocketMessageHandler,
-  ProcessMessageSocket
-} from '../utils/process/processMessageSocket'
 const eventEmitter = new EventEmitter()
 
 export const verifyToken = (req: Request, res: Response) => {
@@ -43,10 +39,10 @@ export const receivedMessage = async (req: Request, res: Response) => {
 
     const conversation = await getConversationWithSystem(messages[0].from)
 
-    console.log('receivedMessage ->', messageObject)
-
     const createdMessage = await createMessage(
-      messageObject.text.body,
+      type === 'text'
+        ? messageObject.text.body
+        : 'El cliente envió un mensaje multimedia, por favor revisar el chat de WhatsApp',
       messages[0].from,
       'system'
     )
@@ -55,16 +51,17 @@ export const receivedMessage = async (req: Request, res: Response) => {
       await createConversationWithSystem(client.data as any)
     }
 
-    ProcessMessageSocket[type as keyof ISocketMessageHandler]({
+    eventEmitter.emit('received-message', {
       client: client?.data,
-      message: messageObject.text.body,
+      message:
+        type === 'text'
+          ? messageObject.text.body
+          : 'El cliente envió un mensaje multimedia, por favor revisar el chat de WhatsApp',
       from: messages[0].from,
-      type_message: type,
+      type_message: 'text',
       message_by: 'client',
       conversations: conversation?.data as Conversation,
-      created_at:
-        (createdMessage.data as { created_at?: string })?.created_at || '',
-      messageObject
+      created_at: (createdMessage.data as { created_at?: string })?.created_at
     })
 
     if (!(client.data as { bot_status?: boolean })?.bot_status) {
