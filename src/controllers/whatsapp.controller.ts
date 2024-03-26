@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express'
 import { ProcessMessages } from '../utils/process/processMessages'
 import type { IMessageHandler } from '../utils/process/processMessages'
-import type { ISocketMessageHandler } from '../utils/process/processMessageSocket'
 import { sendTextMessage } from '../services/whatsapp.service'
 import { createClient } from './clients.cotroller'
 import { createMessage } from './message.controller'
@@ -9,8 +8,13 @@ import {
   createConversationWithSystem,
   getConversationWithSystem
 } from './conversation.controller'
+import EventEmitter from 'events'
 import { Conversation } from '../entities/conversation/conversation.entity'
-import { ProcessMessageSocket } from '../utils/process/processMessageSocket'
+import {
+  ISocketMessageHandler,
+  ProcessMessageSocket
+} from '../utils/process/processMessageSocket'
+const eventEmitter = new EventEmitter()
 
 export const verifyToken = (req: Request, res: Response) => {
   try {
@@ -35,21 +39,17 @@ export const receivedMessage = async (req: Request, res: Response) => {
     const messageObject = messages[0]
     const { type } = messageObject
 
-    const client = await createClient(profileObject.name, messageObject.from)
+    const client = await createClient(profileObject.name, messages[0].from)
 
-    const conversation = await getConversationWithSystem(messageObject.from)
+    const conversation = await getConversationWithSystem(messages[0].from)
 
-    console.log({ conversation })
+    console.log('receivedMessage ->', messageObject)
 
     const createdMessage = await createMessage(
-      messageObject?.text?.body ?? '',
-      messageObject.from,
-      type,
-      messageObject,
+      messageObject.text.body,
+      messages[0].from,
       'system'
     )
-
-    console.log({ createdMessage })
 
     if (!conversation.success) {
       await createConversationWithSystem(client.data as any)
@@ -57,13 +57,13 @@ export const receivedMessage = async (req: Request, res: Response) => {
 
     ProcessMessageSocket[type as keyof ISocketMessageHandler]({
       client: client?.data,
-      message: messageObject?.text?.body,
+      message: messageObject.text.body,
       from: messages[0].from,
       type_message: type,
       message_by: 'client',
       conversations: conversation?.data as Conversation,
       created_at:
-        (createdMessage.data as { created_at?: string })?.created_at ?? '',
+        (createdMessage.data as { created_at?: string })?.created_at || '',
       messageObject
     })
 
@@ -82,14 +82,15 @@ export const receivedMessage = async (req: Request, res: Response) => {
 
     res.send('EVENT_RECEIVED')
   } catch (error) {
-    console.log(error)
     res.send('EVENT_RECEIVED')
   }
 }
 
 export const sendText = async (req: Request, res: Response) => {
-  const { phone, message, type } = req.body
-  const response = await sendTextMessage({ textResponse: message, phone, type })
+  const { phone, message } = req.body
+  const response = await sendTextMessage({ textResponse: message, phone })
 
   res.json(response)
 }
+
+export { eventEmitter }
