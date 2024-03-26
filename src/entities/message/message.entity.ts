@@ -24,6 +24,12 @@ export class Message {
   @Column()
   receiver: string
 
+  @Column({ type: 'enum', enum: ['text', 'image'], nullable: true })
+  type?: 'text' | 'image'
+
+  @Column({ type: 'json', nullable: true })
+  whatsapp_object?: any
+
   @ManyToOne(() => Conversation, (conversation) => conversation.messages)
   @JoinColumn({ name: 'conversation_id', referencedColumnName: 'id' })
   conversation: Conversation
