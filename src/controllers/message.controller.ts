@@ -15,6 +15,8 @@ import { Client } from '../entities/client/clients.entity'
 export const createMessage = async (
   message: string,
   phone_number: string,
+  type: 'text' | 'image',
+  whatsapp_object: any,
   receiver: string
 ) => {
   try {
@@ -29,7 +31,11 @@ export const createMessage = async (
     const conversation = await getConversationWithSystem(client.phone_number)
 
     const messageObject = new Message()
-    messageObject.content = message
+    messageObject.content = message || ''
+    messageObject.type = type
+    messageObject.whatsapp_object = whatsapp_object
+
+    console.log({ messageObject })
 
     if (receiver === 'system') {
       messageObject.sender = client.phone_number
