@@ -1,11 +1,13 @@
 import type {
   IMessage,
   IProfile
-} from '../interfaces/whatsapp/whatsapp.interface'
+} from '../../interfaces/whatsapp/whatsapp.interface'
 import {
   getInteractiveMessageButton,
   getMessageFromUser
-} from './getMessageFromUser'
+} from '../getMessageFromUser'
+
+import { IMessageImage } from '../../interfaces/whatsapp/textImage.interface'
 
 export interface IMessageHandler {
   text: (params: {
@@ -18,9 +20,18 @@ export interface IMessageHandler {
     messageObject: IMessage
     profileObject: IProfile
   }) => void
+  image: (params: {
+    messageObject: IMessageImage
+    profileObject: IProfile
+    phone_number: string
+    clientExists?: boolean
+  }) => void
 }
 
 export const ProcessMessages: IMessageHandler = {
   text: getMessageFromUser,
-  interactive: getInteractiveMessageButton
+  interactive: getInteractiveMessageButton,
+  image: () => {
+    console.log('image')
+  }
 }
