@@ -5,7 +5,7 @@ import {
   ManyToMany,
   CreateDateColumn
 } from 'typeorm'
-import { Product } from './products.entity'
+import { Product } from '../products/products.entity'
 
 @Entity()
 export class Category {
@@ -19,7 +19,7 @@ export class Category {
   description?: string
 
   @ManyToMany(() => Product, (product) => product.categories)
-  products: Product[]
+  products?: Product[]
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date
