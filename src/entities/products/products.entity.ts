@@ -6,6 +6,7 @@ import {
   CreateDateColumn
 } from 'typeorm'
 import { Order } from '../order/order.entity'
+import { Category } from './category.entity'
 
 @Entity()
 export class Product {
@@ -21,8 +22,8 @@ export class Product {
   @Column()
   description: string
 
-  @Column({ nullable: true })
-  category?: string
+  @ManyToMany(() => Category, (category) => category.products)
+  categories: Category[]
 
   @Column({ nullable: true })
   subcategory?: string
