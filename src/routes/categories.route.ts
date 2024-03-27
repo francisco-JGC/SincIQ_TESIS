@@ -5,7 +5,7 @@ import {
   getCategories,
   updateCategory,
   deleteCategory
-} from '../controllers/category.controller'
+} from '../controllers/categories.controller.'
 
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 import { ICreateCategory } from '../entities/products/types/category/create-category'
