@@ -1,5 +1,5 @@
 import { AppDataSource } from '../config/database.config'
-import { Category } from '../entities/products/category.entity'
+import { Category } from '../entities/categories/category.entity'
 import { ICreateCategory } from '../entities/products/types/category/create-category'
 import {
   handleBadRequestResponse,
