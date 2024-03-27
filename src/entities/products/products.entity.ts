@@ -6,7 +6,7 @@ import {
   CreateDateColumn
 } from 'typeorm'
 import { Order } from '../order/order.entity'
-import { Category } from './category.entity'
+import { Category } from '../categories/category.entity'
 
 @Entity()
 export class Product {
