@@ -8,7 +8,7 @@ import {
 } from '../controllers/categories.controller.'
 
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
-import { ICreateCategory } from '../entities/products/types/category/create-category'
+import { ICreateCategory } from '../entities/categories/types/create-category'
 
 const router = Router()
 
