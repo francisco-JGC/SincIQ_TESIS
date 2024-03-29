@@ -16,11 +16,6 @@ export const createOrUpdateCatalogue = async ({
         where: { name }
       }
     )
-    const existCatalogue = await getCatalogues()
-
-    if (existCatalogue.success) {
-      return handleBadRequestResponse({}, 'No puedes crear más de 1 catálogos')
-    }
 
     const catalogueData = new Catalogue()
 
