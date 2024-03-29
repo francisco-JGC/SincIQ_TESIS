@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/database.config'
 import { Category } from '../entities/categories/category.entity'
-import { ICreateCategory } from '../entities/products/types/category/create-category'
+import { ICreateCategory } from '../entities/categories/types/create-category'
 import {
   handleBadRequestResponse,
   handleOkResponse
@@ -11,6 +11,15 @@ export const createCategory = async ({
   description
 }: ICreateCategory) => {
   try {
+    const categoryExist = await getCategoryByName(name)
+
+    if (categoryExist.success) {
+      return handleBadRequestResponse(
+        {},
+        'Ya existe una categoría con ese nombre'
+      )
+    }
+
     const category = new Category()
     category.name = name
     category.description = description
@@ -107,6 +116,18 @@ export const deleteCategory = async (id: number) => {
     }
 
     return handleOkResponse(result)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
+
+export const getCategoryByName = async (name: string) => {
+  try {
+    const category = await AppDataSource.getRepository(Category).findOne({
+      where: { name }
+    })
+
+    return handleOkResponse(category)
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
   }
