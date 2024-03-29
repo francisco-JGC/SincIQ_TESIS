@@ -5,7 +5,7 @@ import {
   handleOkResponse
 } from '../utils/handleHttpsResponse'
 
-export const createCatalogue = async ({
+export const createOrUpdateCatalogue = async ({
   name,
   description,
   banner

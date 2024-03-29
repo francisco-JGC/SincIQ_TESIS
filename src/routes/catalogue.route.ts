@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import {
-  createCatalogue,
+  createOrUpdateCatalogue,
   getCatalogues
 } from '../controllers/catalogue.controller'
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
@@ -17,7 +17,9 @@ router.post('/', async (req, res) => {
     )
   }
 
-  return res.json(await createCatalogue({ name, description, banner } as any))
+  return res.json(
+    await createOrUpdateCatalogue({ name, description, banner } as any)
+  )
 })
 
 router.get('/', async (_req, res) => {
