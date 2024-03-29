@@ -2,7 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  OneToMany,
   CreateDateColumn
 } from 'typeorm'
 import { Product } from '../products/products.entity'
@@ -18,7 +18,7 @@ export class Category {
   @Column({ nullable: true })
   description?: string
 
-  @ManyToMany(() => Product, (product) => product.categories)
+  @OneToMany(() => Product, (product) => product.category)
   products?: Product[]
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
