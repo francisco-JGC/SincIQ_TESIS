@@ -9,16 +9,16 @@ import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 const router = Router()
 
 router.post('/', async (req, res) => {
-  const { name, description, banner } = req.body
+  const { name, description, banner, id } = req.body
 
   if (!name) {
     return res.json(
-      handleBadRequestResponse(res, new Error('No catalogue data provided'))
+      handleBadRequestResponse(res, new Error('El nombre es requerido'))
     )
   }
 
   return res.json(
-    await createOrUpdateCatalogue({ name, description, banner } as any)
+    await createOrUpdateCatalogue({ name, description, banner, id } as any)
   )
 })
 
