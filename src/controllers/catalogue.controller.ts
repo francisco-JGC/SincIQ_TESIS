@@ -6,30 +6,28 @@ import {
 } from '../utils/handleHttpsResponse'
 
 export const createOrUpdateCatalogue = async ({
+  id,
   name,
   description,
   banner
 }: Catalogue) => {
   try {
-    const catalogueExist = await AppDataSource.getRepository(Catalogue).findOne(
-      {
-        where: { name }
-      }
-    )
+    let catalogue = await AppDataSource.getRepository(Catalogue).findOne({
+      where: { id }
+    })
 
-    const catalogueData = new Catalogue()
-
-    if (catalogueExist) {
-      catalogueData.id = catalogueExist.id
+    if (catalogue) {
+      catalogue.name = name
+      catalogue.description = description
+      catalogue.banner = banner
+    } else {
+      catalogue = new Catalogue()
+      catalogue.name = name
+      catalogue.description = description
+      catalogue.banner = banner
     }
 
-    catalogueData.name = name
-    catalogueData.description = description
-    catalogueData.banner = banner
-
-    const result =
-      await AppDataSource.getRepository(Catalogue).save(catalogueData)
-
+    const result = await AppDataSource.getRepository(Catalogue).save(catalogue)
     return handleOkResponse(result)
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
