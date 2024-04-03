@@ -1,14 +1,12 @@
 import { Router } from 'express'
 
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
-import { addProduct } from '../controllers/products.controller'
+import { addProduct, getProducts } from '../controllers/products.controller'
 import { ICreateProduct } from '../entities/products/types/create-product'
 
 const router = Router()
 
 router.post('/', async (req, res) => {
-  console.log('POST /products')
-  console.log('req.body', req.body)
   const product: ICreateProduct = req.body
 
   if (!product) {
@@ -19,6 +17,10 @@ router.post('/', async (req, res) => {
   }
 
   return res.json(await addProduct(product))
+})
+
+router.get('/', async (_req, res) => {
+  return res.json(await getProducts())
 })
 
 export default router

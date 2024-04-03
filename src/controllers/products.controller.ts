@@ -41,3 +41,15 @@ export const addProduct = async (product: ICreateProduct) => {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const getProducts = async () => {
+  try {
+    const products = await AppDataSource.getRepository(Product).find({
+      relations: ['category']
+    })
+
+    return handleOkResponse(products)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
