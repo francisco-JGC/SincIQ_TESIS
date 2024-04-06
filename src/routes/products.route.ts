@@ -1,7 +1,11 @@
 import { Router } from 'express'
 
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
-import { addProduct, getProducts } from '../controllers/products.controller'
+import {
+  addProduct,
+  getProducts,
+  deleteProductById
+} from '../controllers/products.controller'
 import { ICreateProduct } from '../entities/products/types/create-product'
 
 const router = Router()
@@ -23,4 +27,13 @@ router.get('/', async (_req, res) => {
   return res.json(await getProducts())
 })
 
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+
+  if (!id) {
+    return handleBadRequestResponse(res, 'No se proporcionó el ID del producto')
+  }
+
+  return res.json(await deleteProductById(Number(id)))
+})
 export default router
