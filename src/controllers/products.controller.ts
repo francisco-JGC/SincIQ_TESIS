@@ -53,3 +53,28 @@ export const getProducts = async () => {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const deleteProductById = async (id: number) => {
+  try {
+    const product = await AppDataSource.getRepository(Product).findOne({
+      where: { id }
+    })
+
+    if (!product) {
+      return handleBadRequestResponse({}, 'El producto no existe')
+    }
+
+    const result = await AppDataSource.getRepository(Product).delete(id)
+
+    if (!result) {
+      return handleBadRequestResponse(
+        {},
+        'Hubo un error al eliminar el producto'
+      )
+    }
+
+    return handleOkResponse(result)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
