@@ -9,7 +9,7 @@ import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 const router = Router()
 
 router.post('/', async (req, res) => {
-  const { name, description, banner, id } = req.body
+  const { name, description, banner, id, address, location } = req.body
 
   if (!name) {
     return res.json(
@@ -18,7 +18,14 @@ router.post('/', async (req, res) => {
   }
 
   return res.json(
-    await createOrUpdateCatalogue({ name, description, banner, id } as any)
+    await createOrUpdateCatalogue({
+      name,
+      description,
+      banner,
+      id,
+      address,
+      location
+    } as any)
   )
 })
 
