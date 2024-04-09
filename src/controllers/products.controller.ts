@@ -95,3 +95,52 @@ export const getProductById = async (id: number) => {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const updateProductById = async (
+  id: number,
+  product: ICreateProduct
+) => {
+  try {
+    const productRepository = await getCategoryByName(product.category)
+    if (!productRepository.success) {
+      return handleBadRequestResponse({}, 'La categoría no existe')
+    }
+
+    const productToUpdate = await AppDataSource.getRepository(Product).findOne({
+      where: { id }
+    })
+
+    if (!productToUpdate) {
+      return handleBadRequestResponse({}, 'El producto no existe')
+    }
+
+    productToUpdate.name = product.name
+    productToUpdate.price = Number(product.price)
+    productToUpdate.gender = product.gender
+    productToUpdate.description = product.description
+    productToUpdate.category = productRepository.data as any
+    productToUpdate.discount = Number(product.discount)
+    productToUpdate.quantity = Number(product.quantity)
+    productToUpdate.state = product.state
+    productToUpdate.visibility = product.visibility
+    productToUpdate.images_url = [
+      product.uploadImg1,
+      product.uploadImg2 || '',
+      product.uploadImg3 || ''
+    ]
+
+    const result =
+      await AppDataSource.getRepository(Product).save(productToUpdate)
+
+    if (!result) {
+      return handleBadRequestResponse(
+        {},
+        'Hubo un error al actualizar el producto'
+      )
+    }
+
+    return handleOkResponse(result)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
