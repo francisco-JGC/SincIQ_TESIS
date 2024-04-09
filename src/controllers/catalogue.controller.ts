@@ -9,6 +9,8 @@ export const createOrUpdateCatalogue = async ({
   id,
   name,
   description,
+  address,
+  location,
   banner
 }: Catalogue) => {
   try {
@@ -20,11 +22,15 @@ export const createOrUpdateCatalogue = async ({
       catalogue.name = name
       catalogue.description = description
       catalogue.banner = banner
+      catalogue.location = location
+      catalogue.address = address
     } else {
       catalogue = new Catalogue()
       catalogue.name = name
       catalogue.description = description
       catalogue.banner = banner
+      catalogue.location = location
+      catalogue.address = address
     }
 
     const result = await AppDataSource.getRepository(Catalogue).save(catalogue)
