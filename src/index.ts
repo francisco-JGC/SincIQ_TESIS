@@ -48,7 +48,6 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
   emitterWhatsapp.on('received-message', (data) => {
-    console.log('received-message', data)
     socket.emit('server:receive-message', data)
   })
 
