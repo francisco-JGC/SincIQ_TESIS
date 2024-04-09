@@ -1,4 +1,6 @@
+import { getCatalogues } from '../controllers/catalogue.controller'
 import { getConversationWithSystem } from '../controllers/conversation.controller'
+import { getProducts } from '../controllers/products.controller'
 import { Conversation } from '../entities/conversation/conversation.entity'
 import { IMessageImage } from '../interfaces/whatsapp/textImage.interface'
 import type {
@@ -21,19 +23,22 @@ export const getMessageFromUser = async ({
   const conversationRes = await getConversationWithSystem(phone_number)
   const conversation = conversationRes.data as Conversation
 
+  const catalogue = await getCatalogues()
+  const products = await getProducts()
+
   const generated = await generateMessageFromGPT({
     thread: conversation.messages,
     prompt: {
       client_name: profileObject.name,
-      products: [
-        { name: 'iPhone 13 Pro Max', price: 1099 },
-        { name: 'Samsung Galaxy S21 Ultra', price: 1199 },
-        { name: 'Google Pixel 6 Pro', price: 899 },
-        { name: 'OnePlus 9 Pro', price: 969 }
-      ],
-      business_name: 'Tech Store',
-      business_address: '123 Main St, New York, NY 10030',
-      location: 'New York'
+      products: (products.data as Array<{ name: any; price: any }>)?.map(
+        (product: { name: any; price: any }) => ({
+          name: product.name,
+          price: product.price
+        })
+      ),
+      business_name: (catalogue.data as any[])[0]?.name,
+      business_address: (catalogue.data as any[])[0]?.address,
+      location: (catalogue.data as any[])[0]?.location
     }
   })
 
