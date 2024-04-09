@@ -46,21 +46,19 @@ export const getMessageFromUser = async ({
 }
 
 export const getInteractiveMessageButton = ({
-  messageObject,
-  profileObject
+  messageObject
+  // profileObject
 }: {
   messageObject: IMessage
   profileObject: IProfile
 }) => {
   const { interactive } = messageObject
-  const { name } = profileObject
-  let text = ''
+  // const { name } = profileObject
+  // let text = ''
 
   if (interactive.type === 'button_reply') {
-    text = interactive.button_reply.title
+    // text = interactive.button_reply.title
   }
-
-  console.log(`Message from ${name}: ${text}`)
 }
 
 export const getImageMessage = async ({
@@ -74,6 +72,5 @@ export const getImageMessage = async ({
   const conversationRes = await getConversationWithSystem(phone_number)
   const conversation = conversationRes.data as Conversation
 
-  console.log('Image message from', phone_number)
   console.log('Conversation', conversation)
 }
