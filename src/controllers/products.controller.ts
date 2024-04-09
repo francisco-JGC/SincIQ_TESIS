@@ -78,3 +78,20 @@ export const deleteProductById = async (id: number) => {
     return handleBadRequestResponse({}, error.message)
   }
 }
+
+export const getProductById = async (id: number) => {
+  try {
+    const product = await AppDataSource.getRepository(Product).findOne({
+      where: { id },
+      relations: ['category']
+    })
+
+    if (!product) {
+      return handleBadRequestResponse({}, 'El producto no existe')
+    }
+
+    return handleOkResponse(product)
+  } catch (error: any) {
+    return handleBadRequestResponse({}, error.message)
+  }
+}
