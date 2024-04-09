@@ -5,7 +5,8 @@ import {
   addProduct,
   getProducts,
   deleteProductById,
-  getProductById
+  getProductById,
+  updateProductById
 } from '../controllers/products.controller'
 import { ICreateProduct } from '../entities/products/types/create-product'
 
@@ -46,6 +47,24 @@ router.get('/:id', async (req, res) => {
   }
 
   return res.json(await getProductById(Number(id)))
+})
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params
+  const product: ICreateProduct = req.body
+
+  if (!id) {
+    return handleBadRequestResponse(res, 'No se proporcionó el ID del producto')
+  }
+
+  if (!product) {
+    return handleBadRequestResponse(
+      res,
+      'No se proporcionaron datos del producto'
+    )
+  }
+
+  return res.json(await updateProductById(Number(id), product))
 })
 
 export default router
