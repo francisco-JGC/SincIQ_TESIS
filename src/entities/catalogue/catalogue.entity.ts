@@ -19,6 +19,12 @@ export class Catalogue {
   @Column({ nullable: true })
   banner?: string
 
+  @Column({ nullable: true })
+  location?: string
+
+  @Column({ nullable: true })
+  address?: string
+
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date
 }
