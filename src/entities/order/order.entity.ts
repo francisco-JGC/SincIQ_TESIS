@@ -15,15 +15,30 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ default: 'pending' })
-  status: string
-
   @ManyToOne(() => Client, (client) => client.orders)
-  @JoinColumn() // <-- This is the column name in `order` table
-  client: Client
+  @JoinColumn()
+  client?: Client
 
   @ManyToMany(() => Product, (product) => product.orders)
   products: Product[]
+
+  @Column()
+  state: string // 'waiting' | 'cancelled' | 'completed
+
+  @Column()
+  quantity: number
+
+  @Column()
+  client_name: string
+
+  @Column()
+  total_price: number
+
+  @Column({ nullable: true })
+  discount?: number
+
+  @Column({ nullable: true })
+  unit_price?: number
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date
