@@ -2,9 +2,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
   CreateDateColumn,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from 'typeorm'
 import { Order } from '../order/order.entity'
 import { Category } from '../categories/category.entity'
@@ -44,8 +44,8 @@ export class Product {
   @Column('text', { array: true, nullable: true, default: [] })
   images_url?: string[]
 
-  @ManyToMany(() => Order, (order) => order.products, { nullable: true })
-  orders?: Order[]
+  @OneToMany(() => Order, (order) => order.products, { nullable: true })
+  orders?: Order
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date
