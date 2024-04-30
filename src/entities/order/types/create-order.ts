@@ -1,6 +1,6 @@
 export interface ICreateInstantOrder {
-  client_name: string
+  client_name?: string
+  phone_number?: string
   id_products: number[]
-  quantity: number
   total_price: number
 }
