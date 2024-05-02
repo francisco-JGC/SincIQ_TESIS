@@ -4,7 +4,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  OneToMany
 } from 'typeorm'
 import { Client } from '../client/clients.entity'
 import { Product } from '../products/products.entity'
@@ -18,11 +19,11 @@ export class Order {
   @JoinColumn()
   client?: Client
 
-  @ManyToOne(() => Product, (product) => product.orders)
+  @OneToMany(() => Product, (product) => product.orders)
   products: Product[]
 
   @Column()
-  state: string // 'waiting' | 'cancelled' | 'completed
+  state: string // 'waiting' | 'cancelled' | 'completed'
 
   @Column()
   client_name: string
