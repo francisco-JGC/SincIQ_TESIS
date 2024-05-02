@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { createInstantOrder } from '../controllers/orders.controller'
+import {
+  createInstantOrder,
+  getSaleOrders
+} from '../controllers/orders.controller'
 import { ICreateInstantOrder } from '../entities/order/types/create-order'
 import { handleBadRequestResponse } from '../utils/handleHttpsResponse'
 
@@ -17,4 +20,7 @@ router.post('/', async (req, res) => {
   return res.json(await createInstantOrder(order))
 })
 
+router.get('/sales', async (_req, res) => {
+  return res.json(await getSaleOrders())
+})
 export default router
