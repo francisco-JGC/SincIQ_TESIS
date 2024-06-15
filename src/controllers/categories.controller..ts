@@ -127,6 +127,10 @@ export const getCategoryByName = async (name: string) => {
       where: { name }
     })
 
+    if (!category) {
+      return handleBadRequestResponse({}, 'No se encontró la categoría')
+    }
+
     return handleOkResponse(category)
   } catch (error: any) {
     return handleBadRequestResponse({}, error.message)
